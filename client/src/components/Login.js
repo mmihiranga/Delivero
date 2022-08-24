@@ -7,6 +7,7 @@ import { FcGoogle } from 'react-icons/fc';
 import MailOutlineSharpIcon from '@mui/icons-material/MailOutlineSharp';
 import { GoogleLogin } from 'react-google-login'
 import { gapi } from 'gapi-script'
+import api from '../api';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { useNavigate } from 'react-router-dom'
 
@@ -135,6 +136,8 @@ const ContinueEmailButton = styled(Button)(({ theme }) => ({
 
 }));
 
+
+
 const Login = () => {
     const classes = useStyles();
     const clientId = "380810221970-6p2h323ibdoknuaddgrb432skkdm157o.apps.googleusercontent.com"
@@ -150,8 +153,41 @@ const Login = () => {
         gapi.load('client:auth2', start)
     }, []);
 
+
+    const responseFacebook = (response) => {
+        console.log("FB", response);
+    }
+
+
+
+
+
     const onSuccess = (res) => {
-        console.log("LOGIN SUCCESS!", res.profileObj)
+        console.log("LOGIN SUCCESS!",res.profileObj)
+        if(res.profileObj){
+            const userDetails ={
+                username: res.profileObj.name,
+                email: res.profileObj.email,
+                password: res.profileObj.googleId
+            }
+            api.post('/user/getuser', userDetails)
+            .then(function (response) {
+                console.log(response)
+                if(response.data.length === 0){
+                    api.post('/user/addUser', userDetails)
+                    .then(function (response) {
+                        console.log(response)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+        
     }
 
 
@@ -159,9 +195,7 @@ const Login = () => {
         console.log("LOGIN FAILED!", res)
     }
 
-    const responseFacebook = (response) => {
-        console.log("FB", response);
-    }
+ 
 
     return (
         <div>
@@ -171,11 +205,10 @@ const Login = () => {
                     appId="728817248189489"
                     callback={responseFacebook}
                     fields="name,email,picture"
-                    
                     render={renderProps => (
                         <FacebookButton onClick={renderProps.onClick} variant="contained" startIcon={<FacebookRoundedIcon />}>Continue With Facebook</FacebookButton>
                     )}
-                />
+                    />
 
                 <GoogleLogin
                     clientId={clientId}
@@ -186,7 +219,7 @@ const Login = () => {
                     onSuccess={onSuccess}
                     onFailure={onFailure}
                     cookiePolicy={'single_host_origin'}
-                    isSignedIn={true}
+                    // isSignedIn={true}
                 />
 
                 <div className={classes.loginContainerLine}><div className={classes.loginHR}></div> <span>or</span> <div className={classes.loginHR}></div></div>

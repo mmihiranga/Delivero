@@ -178,9 +178,7 @@ const Home = () => {
     }, [menuList]);
     return (
         <div>
-            <div style={{ background: 'white', padding: '16px' }}>
-                <QRCode value={window.location.href} />
-            </div>
+           
             <div className={classes.container}>
                 <div>
                     <img src={DisplayImage} alt="Logo" className={classes.displayImage} />
@@ -238,7 +236,12 @@ const Home = () => {
                         <div style={{ color: "#00b8a9" }}>change</div>
                     </div>
                     <Button style={{ color: "#585c5c", textTransform: "none", padding: "7px 14px 7px 14px", background: "none", fontSize: "15px", fontWeight: "400", fontFamily: "plex-sans,sans-serif", border: "1px solid #a3afaf", }} startIcon={<BsPeople style={{ color: "#00b8a9", fontSize: "18px" }} />}>Start group order</Button>
+                 
+                    <div style={{ background: 'white', padding: '16px',}}>
+                        <QRCode value={window.location.href}  size="150" />
+                    </div>
                 </div>
+                
 
             </div>
             <Menubar/>
