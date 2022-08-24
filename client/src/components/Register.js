@@ -4,6 +4,7 @@ import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 import MailOutlineSharpIcon from '@mui/icons-material/MailOutlineSharp';
 import { Typography } from '@mui/material';
+import api from '../api';
 
 const useStyles = makeStyles({
     loginContainer: {
@@ -118,9 +119,55 @@ const ForgetPasswordButton = styled(Button)(({ theme }) => ({
 }));
 const Register = () => {
     const classes = useStyles();
+    const [toggleRegister, setToggleRegister] = useState(false)
     const [toggle, setToggle] = useState(false)
+    const [userDetails, setUserDetails] = useState({username:"",email:"",password:""})
 
+    const handleChange = (e) => {
+        setUserDetails({ ...userDetails, [e.target.name]: e.target.value })
+    }
 
+    const emailCheck =()=>{
+        setToggle(true)
+        if(userDetails){
+            // const user ={
+            //     username: userDetails.name,
+            //     email: userDetails.email,
+            //     password: userDetails.password
+            // }
+            api.post('/user/getuser', userDetails)
+            .then(function (response) {
+                console.log(response)
+                if(response.data.length === 0){
+                    // setToggleRegister(false);
+                }else{
+                    console.log("user already exists")
+                    setToggleRegister(true);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+    }
+    const userLogin =()=>{
+        api.post('/user/validate', userDetails)
+        .then(function (response) {
+            console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    const userRegister =()=>{
+        api.post('/user/addUser', userDetails)
+        .then(function (response) {
+            console.log(response)
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
     return (
         <div>
             <div className={classes.loginContainer}>
@@ -130,23 +177,35 @@ const Register = () => {
                         <div className={classes.label}>
                             Email Address
                         </div>
-                        <input placeholder='e.g. name@example.com' className={classes.input} type="email" name="email" />
+                        <input placeholder='e.g. name@example.com' className={classes.input} type="email" name="email" onChange={handleChange}/>
 
-                        <ContinueEmailButton variant="contained" onClick={()=>setToggle(true)} >Continue </ContinueEmailButton>
+                        <ContinueEmailButton variant="contained" onClick={()=>emailCheck()} >Continue </ContinueEmailButton>
                     </>
                     :
                     <>
+                    {!toggleRegister ?
+                    <div>
                         <div className={classes.label}>
                             Name
                         </div>
-                        <input placeholder='John Walker' className={classes.input} type="text" name="name" />
-
+                        <input placeholder='John Walker' className={classes.input} type="text" name="username" onChange={handleChange}/>
+                        
 
                         <div className={classes.label}>
                             Password
                         </div>
-                        <input className={classes.input} type="password" name="name" />
-                        <ContinueEmailButton variant="contained" >Continue </ContinueEmailButton>
+                        <input className={classes.input} type="password" name="password" onChange={handleChange}/>
+                        <ContinueEmailButton variant="contained" onClick={()=>userRegister()}>Register </ContinueEmailButton>
+                        </div>
+                        :
+                        <div>
+                        <div className={classes.label}>
+                        Password
+                        </div>
+                        <input className={classes.input} type="password" name="password" onChange={handleChange}/>
+                        <ContinueEmailButton variant="contained" onClick={()=>userLogin()}>Login </ContinueEmailButton>
+                        </div>
+                    }
                     </>
                 }
                 <ForgetPasswordButton variant="contained" >Forget Password?</ForgetPasswordButton>
