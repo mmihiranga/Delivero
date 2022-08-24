@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
@@ -6,7 +6,10 @@ import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 import { FcGoogle } from 'react-icons/fc';
 import MailOutlineSharpIcon from '@mui/icons-material/MailOutlineSharp';
 import { GoogleLogin } from 'react-google-login'
-import {gapi} from 'gapi-script'
+import { gapi } from 'gapi-script'
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import { useNavigate } from 'react-router-dom'
+
 const useStyles = makeStyles({
     loginContainer: {
         maxWidth: "400px",
@@ -135,34 +138,49 @@ const ContinueEmailButton = styled(Button)(({ theme }) => ({
 const Login = () => {
     const classes = useStyles();
     const clientId = "380810221970-6p2h323ibdoknuaddgrb432skkdm157o.apps.googleusercontent.com"
+    const navigate = useNavigate()
 
     useEffect(() => {
-        function start(){
+        function start() {
             gapi.client.init({
                 clientId: clientId,
                 scope: ""
             })
         };
-        gapi.load('client:auth2',start)
+        gapi.load('client:auth2', start)
     }, []);
 
     const onSuccess = (res) => {
-        console.log("LOGIN SUCCESS!",res.profileObj)
+        console.log("LOGIN SUCCESS!", res.profileObj)
     }
 
 
     const onFailure = (res) => {
         console.log("LOGIN FAILED!", res)
     }
+
+    const responseFacebook = (response) => {
+        console.log("FB", response);
+    }
+
     return (
         <div>
             <div className={classes.loginContainer}>
                 <h2 className={classes.titleLog}>Sign Up or Login</h2>
-                <FacebookButton variant="contained" startIcon={<FacebookRoundedIcon />}>Continue With Facebook</FacebookButton>
+                <FacebookLogin
+                    appId="728817248189489"
+                    callback={responseFacebook}
+                    fields="name,email,picture"
+                    
+                    render={renderProps => (
+                        <FacebookButton onClick={renderProps.onClick} variant="contained" startIcon={<FacebookRoundedIcon />}>Continue With Facebook</FacebookButton>
+                    )}
+                />
+
                 <GoogleLogin
                     clientId={clientId}
                     render={renderProps => (
-                        <GoogleButton  onClick={renderProps.onClick} disabled={renderProps.disabled} variant="contained" startIcon={<FcGoogle />}>Continue With Google</GoogleButton>
+                        <GoogleButton onClick={renderProps.onClick} disabled={renderProps.disabled} variant="contained" startIcon={<FcGoogle />}>Continue With Google</GoogleButton>
                     )}
                     buttonText="Login"
                     onSuccess={onSuccess}
@@ -170,9 +188,9 @@ const Login = () => {
                     cookiePolicy={'single_host_origin'}
                     isSignedIn={true}
                 />
-                
+
                 <div className={classes.loginContainerLine}><div className={classes.loginHR}></div> <span>or</span> <div className={classes.loginHR}></div></div>
-                <ContinueEmailButton variant="contained" startIcon={<MailOutlineSharpIcon />}>Continue With Email</ContinueEmailButton>
+                <ContinueEmailButton variant="contained" onClick={() => navigate('/register')} startIcon={<MailOutlineSharpIcon />}>Continue With Email</ContinueEmailButton>
                 <p className={classes.termsAndConditions}>By continuing you agree to our  <a href="google.com" target="_blank" className={classes.linkTxt}>T&Cs</a>. Please also check out our <a href="google.com" target="_blank" className={classes.linkTxt}>Privacy Policy</a>. We use your data to offer you a personalised experience and to better understand and improve our services. <a href="google.com" target="_blank" className={classes.linkTxt}>For more information see here</a>.</p>
             </div>
         </div>
