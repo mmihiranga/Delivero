@@ -1,41 +1,41 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { styled } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 import { FcGoogle } from 'react-icons/fc';
 import MailOutlineSharpIcon from '@mui/icons-material/MailOutlineSharp';
-
-
-const useStyles = makeStyles ({
+import { GoogleLogin } from 'react-google-login'
+import {gapi} from 'gapi-script'
+const useStyles = makeStyles({
     loginContainer: {
         maxWidth: "400px",
         margin: "0 auto",
         padding: "64px 16px",
     },
-    titleLog:{
+    titleLog: {
         color: "#3d3d3d",
         fontSize: "21.5px",
     },
-    loginContainerLine:{
+    loginContainerLine: {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         marginBottom: "16px",
         color: "#585c5c",
     },
-    loginHR:{
+    loginHR: {
         width: "170px",
         height: "1px",
         backgroundColor: "#d1d1d1",
     },
-    termsAndConditions:{
+    termsAndConditions: {
         fontSize: "14.2px",
         color: "#585c5c",
-        WebkitFontSmoothing:"subpixel-antialiased",
-        WebkitTextSizeAdjust:"100%",
+        WebkitFontSmoothing: "subpixel-antialiased",
+        WebkitTextSizeAdjust: "100%",
     },
-    linkTxt:{
+    linkTxt: {
         color: "#00ccbc",
     }
 });
@@ -56,7 +56,7 @@ const FacebookButton = styled(Button)(({ theme }) => ({
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    fontFamily:"plex-sans, sans-serif",
+    fontFamily: "plex-sans, sans-serif",
     outline: "none",
     cursor: "pointer",
     textTransform: "none",
@@ -66,9 +66,9 @@ const FacebookButton = styled(Button)(({ theme }) => ({
         backgroundColor: "#4c69ba",
     },
 
-  }));
+}));
 
-  const GoogleButton = styled(Button)(({ theme }) => ({
+const GoogleButton = styled(Button)(({ theme }) => ({
     transitionProperty: "box-shadow",
     transitionDuration: "150ms",
     transitionTimingFunction: "ease-in-out",
@@ -91,20 +91,20 @@ const FacebookButton = styled(Button)(({ theme }) => ({
     webkitAppearance: "none",
     mozAppearance: "none",
     appearance: "none",
-    fontFamily:"plex-sans, sans-serif",
+    fontFamily: "plex-sans, sans-serif",
     minHeight: "48px",
-    padding:" 12px 24px",
+    padding: " 12px 24px",
     textTransform: "none",
     elevation: "0",
     marginBottom: "16px",
     '&:hover': {
         background: "none",
     },
-    
-  }));
+
+}));
 
 
-  const ContinueEmailButton = styled(Button)(({ theme }) => ({
+const ContinueEmailButton = styled(Button)(({ theme }) => ({
     transitionProperty: "box-shadow",
     transitionDuration: "150ms",
     transitionTimingFunction: "ease-in-out",
@@ -120,7 +120,7 @@ const FacebookButton = styled(Button)(({ theme }) => ({
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    fontFamily:"plex-sans, sans-serif",
+    fontFamily: "plex-sans, sans-serif",
     outline: "none",
     cursor: "pointer",
     textTransform: "none",
@@ -129,18 +129,49 @@ const FacebookButton = styled(Button)(({ theme }) => ({
     '&:hover': {
         background: "#00ccbc",
     },
-    
-  }));
-  
+
+}));
+
 const Login = () => {
     const classes = useStyles();
+    const clientId = "380810221970-6p2h323ibdoknuaddgrb432skkdm157o.apps.googleusercontent.com"
+
+    useEffect(() => {
+        function start(){
+            gapi.client.init({
+                clientId: clientId,
+                scope: ""
+            })
+        };
+        gapi.load('client:auth2',start)
+    }, []);
+
+    const onSuccess = (res) => {
+        console.log("LOGIN SUCCESS!",res.profileObj)
+    }
+
+
+    const onFailure = (res) => {
+        console.log("LOGIN FAILED!", res)
+    }
     return (
         <div>
             <div className={classes.loginContainer}>
                 <h2 className={classes.titleLog}>Sign Up or Login</h2>
                 <FacebookButton variant="contained" startIcon={<FacebookRoundedIcon />}>Continue With Facebook</FacebookButton>
-                <GoogleButton variant="contained" startIcon={<FcGoogle />}>Continue With Google</GoogleButton>
-                <div  className={classes.loginContainerLine}><div  className={classes.loginHR}></div> <span>or</span> <div  className={classes.loginHR}></div></div>
+                <GoogleLogin
+                    clientId={clientId}
+                    render={renderProps => (
+                        <GoogleButton  onClick={renderProps.onClick} disabled={renderProps.disabled} variant="contained" startIcon={<FcGoogle />}>Continue With Google</GoogleButton>
+                    )}
+                    buttonText="Login"
+                    onSuccess={onSuccess}
+                    onFailure={onFailure}
+                    cookiePolicy={'single_host_origin'}
+                    isSignedIn={true}
+                />
+                
+                <div className={classes.loginContainerLine}><div className={classes.loginHR}></div> <span>or</span> <div className={classes.loginHR}></div></div>
                 <ContinueEmailButton variant="contained" startIcon={<MailOutlineSharpIcon />}>Continue With Email</ContinueEmailButton>
                 <p className={classes.termsAndConditions}>By continuing you agree to our  <a href="google.com" target="_blank" className={classes.linkTxt}>T&Cs</a>. Please also check out our <a href="google.com" target="_blank" className={classes.linkTxt}>Privacy Policy</a>. We use your data to offer you a personalised experience and to better understand and improve our services. <a href="google.com" target="_blank" className={classes.linkTxt}>For more information see here</a>.</p>
             </div>

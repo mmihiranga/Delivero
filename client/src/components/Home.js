@@ -15,6 +15,7 @@ import MenuData from './../data/menu dishes sample.json'
 import { useSelector, useDispatch } from 'react-redux';
 import { addMenu } from './../features/Menus'
 import MenuItem from './MenuItem';
+import QRCode from "react-qr-code";
 
 const useStyles = makeStyles({
     displayImage: {
@@ -119,8 +120,8 @@ const useStyles = makeStyles({
         lineHeight: "28px",
     },
     menuList: {
-        display:'flex',
-        flexWrap:'wrap'
+        display: 'flex',
+        flexWrap: 'wrap'
         // fontWeight: '700',
         // color: '#2e3333',
         // fontFamily: " stratos,sans-serif",
@@ -173,6 +174,9 @@ const Home = () => {
     }, [menuList]);
     return (
         <div>
+            <div style={{ background: 'white', padding: '16px' }}>
+                <QRCode value={window.location.href} />
+            </div>
             <div className={classes.container}>
                 <div>
                     <img src={DisplayImage} alt="Logo" className={classes.displayImage} />
@@ -235,7 +239,7 @@ const Home = () => {
             </div>
 
             <div>
-                {menuList.value.length > 0 && menuList.value.map((menu,i) =>
+                {menuList.value.length > 0 && menuList.value.map((menu, i) =>
 
                     <div key={i}>
                         <div>
