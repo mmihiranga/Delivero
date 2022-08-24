@@ -15,6 +15,7 @@ import MenuData from './../data/menu dishes sample.json'
 import { useSelector, useDispatch } from 'react-redux';
 import { addMenu } from './../features/Menus'
 import MenuItem from './MenuItem';
+import Menubar from './Menubar';
 import QRCode from "react-qr-code";
 
 const useStyles = makeStyles({
@@ -120,14 +121,17 @@ const useStyles = makeStyles({
         lineHeight: "28px",
     },
     menuList: {
-        display: 'flex',
-        flexWrap: 'wrap'
-        // fontWeight: '700',
-        // color: '#2e3333',
-        // fontFamily: " stratos,sans-serif",
-        // fontSize: "22px",
-        // lineHeight: "28px",
+        display:'flex',
+        justifyContent: 'flex-start',
+        flexWrap:'wrap'
+        
     },
+    menuContainer:{
+        marginLeft:'30px',
+    },
+    menuTitleContainer:{
+        margin:'30px 0px 0px 0px',
+    }
 });
 
 const theme = createTheme({
@@ -237,12 +241,12 @@ const Home = () => {
                 </div>
 
             </div>
-
-            <div>
-                {menuList.value.length > 0 && menuList.value.map((menu, i) =>
+            <Menubar/>
+            <div className={classes.menuContainer}>
+                {menuList.value.length > 0 && menuList.value.map((menu,i) =>
 
                     <div key={i}>
-                        <div>
+                        <div className={classes.menuTitleContainer}>
                             <Typography className={classes.menuTitle} variant="title">
                                 {menu.title}
                             </Typography>
