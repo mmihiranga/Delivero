@@ -1,8 +1,6 @@
-
+/* eslint-disable react/prop-types */
 import * as React from 'react';
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -16,26 +14,16 @@ const useStyles = makeStyles({
         objectFit: "cover"
 
     },
-    card:{
-        // flex:'50%',
-        // width: '100%',
-        // minHeight: "160px",
-        // overflow:'hidden',
-        // backgroundColor: "#f5f5f8",
-        // margin: '10px'
-    },
-    CardDetailsContent:{
-        display:"flex",
-        justifyContent:"space-evenly",
-        alignItems:"flex-start",
-        flexDirection:"column",
-        width:"60%",
-        height:"80%",
-        overflow:"hidden",
+    CardDetailsContent: {
+        display: "flex",
+        justifyContent: "space-evenly",
+        alignItems: "flex-start",
+        flexDirection: "column",
+        width: "60%",
+        height: "80%",
+        overflow: "hidden",
     }
 });
-
-
 
 const theme = createTheme({
     typography: {
@@ -44,9 +32,9 @@ const theme = createTheme({
             color: '#2e3333',
             fontFamily: " stratos,sans-serif",
             fontSize: "15px",
-            width:"100%",
-            height:"16px",
-            overflow:"hidden",
+            width: "100%",
+            height: "16px",
+            overflow: "hidden",
 
         },
         body1: {
@@ -54,17 +42,17 @@ const theme = createTheme({
             fontSize: "13px",
             fontWeight: "400",
             fontFamily: "plex-sans,sans-serif",
-            width:"100%",
-            height:"40px",
-            textOverflow:"ellipsis",
-            overflow:"hidden",
+            width: "100%",
+            height: "40px",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
         },
         price1: {
             color: "#585c5c",
             fontSize: "16px",
             fontWeight: "400",
             fontFamily: "plex-sans,sans-serif",
-            width:"100%",
+            width: "100%",
         },
     },
 });
@@ -75,28 +63,28 @@ const MenuItem = ({ name, desc, price, image }) => {
     const classes = useStyles();
 
     return (
-       
-            <CardActionArea 
-                sx={{ 
-                        display: 'flex', 
-                        flexWrap:'wrap',
-                        justifyContent: 'space-evenly',
-                        alignItems: 'center',
-                        backgroundColor: "#f5f5f8",
-                        margin:'10px', 
-                        height:'140px',
-                        width:'40%',
-                        elevation:4,
-                        borderRadius: '5px',
-                        overflow:'hidden',
-                        "&:hover": {
-                            backgroundColor: "#f5f5f8",
-                            elevation:8,
-                        }
-                        }}>
-                
-                <CardContent className={classes.CardDetailsContent}>
-                    <ThemeProvider theme={theme}>
+
+        <CardActionArea
+            sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                backgroundColor: "#f5f5f8",
+                margin: '10px',
+                height: '140px',
+                width: '40%',
+                elevation: 4,
+                borderRadius: '5px',
+                overflow: 'hidden',
+                "&:hover": {
+                    backgroundColor: "#f5f5f8",
+                    elevation: 8,
+                }
+            }}>
+
+            <CardContent className={classes.CardDetailsContent}>
+                <ThemeProvider theme={theme}>
                     <Typography gutterBottom variant="title1" component="div">
                         {name}
                     </Typography>
@@ -105,15 +93,15 @@ const MenuItem = ({ name, desc, price, image }) => {
                     </Typography>
 
                     <Typography variant="price1" color="text.secondary">
-                        £{price} 
+                        £{price}
                     </Typography>
-                    </ThemeProvider>
-                </CardContent>
-                <div>
-                    <img src={image ? image : "https://firebasestorage.googleapis.com/v0/b/eat-me-global-pte-ltd.appspot.com/o/1641971925020_Chicken%20%26%20Corn%20Soup%2Fchicken.sweet.corn.soup.jpg?alt=media&token=df8b581d-1087-438c-ac8f-eb44dad4ac62"} alt="img" className={classes.itemImage} />
-                </div>
-            </CardActionArea>
-       
+                </ThemeProvider>
+            </CardContent>
+            <div>
+                <img src={image ? image : "https://firebasestorage.googleapis.com/v0/b/eat-me-global-pte-ltd.appspot.com/o/1641971925020_Chicken%20%26%20Corn%20Soup%2Fchicken.sweet.corn.soup.jpg?alt=media&token=df8b581d-1087-438c-ac8f-eb44dad4ac62"} alt="img" className={classes.itemImage} />
+            </div>
+        </CardActionArea>
+
     )
 }
 

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
-import MailOutlineSharpIcon from '@mui/icons-material/MailOutlineSharp';
-import { Typography } from '@mui/material';
 import api from '../api';
+import { addUser } from './../features/Users'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles({
     loginContainer: {
@@ -59,10 +60,7 @@ const useStyles = makeStyles({
     }
 });
 
-
-
-
-const ContinueEmailButton = styled(Button)(({ theme }) => ({
+const ContinueEmailButton = styled(Button)(() => ({
     transitionProperty: "box-shadow",
     transitionDuration: "150ms",
     transitionTimingFunction: "ease-in-out",
@@ -90,9 +88,7 @@ const ContinueEmailButton = styled(Button)(({ theme }) => ({
 
 }));
 
-
-
-const ForgetPasswordButton = styled(Button)(({ theme }) => ({
+const ForgetPasswordButton = styled(Button)(() => ({
     borderRadius: "4px",
     height: "48px",
     width: "100%",
@@ -117,56 +113,54 @@ const ForgetPasswordButton = styled(Button)(({ theme }) => ({
     },
 
 }));
+
 const Register = () => {
     const classes = useStyles();
     const [toggleRegister, setToggleRegister] = useState(false)
     const [toggle, setToggle] = useState(false)
-    const [userDetails, setUserDetails] = useState({username:"",email:"",password:""})
+    const [userDetails, setUserDetails] = useState({ username: "", email: "", password: "" })
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         setUserDetails({ ...userDetails, [e.target.name]: e.target.value })
     }
 
-    const emailCheck =()=>{
+    const emailCheck = () => {
         setToggle(true)
-        if(userDetails){
-            // const user ={
-            //     username: userDetails.name,
-            //     email: userDetails.email,
-            //     password: userDetails.password
-            // }
+        if (userDetails) {
             api.post('/user/getuser', userDetails)
+                .then(function (response) {
+                    console.log(response)
+                    if (response.data.length !== 0) {
+                        console.log("user already exists")
+                        setToggleRegister(true);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    }
+    const userLogin = () => {
+        api.post('/user/validate', userDetails)
             .then(function (response) {
                 console.log(response)
-                if(response.data.length === 0){
-                    // setToggleRegister(false);
-                }else{
-                    console.log("user already exists")
-                    setToggleRegister(true);
-                }
+                dispatch(addUser(response.data))
+                navigate('/')
             })
             .catch(function (error) {
                 console.log(error);
             });
-        }
-    }
-    const userLogin =()=>{
-        api.post('/user/validate', userDetails)
-        .then(function (response) {
-            console.log(response)
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
     }
 
-    const userRegister =()=>{
+    const userRegister = () => {
         api.post('/user/addUser', userDetails)
-        .then(function (response) {
-            console.log(response)
-        }).catch(function (error) {
-            console.log(error);
-        });
+            .then(function (response) {
+                console.log(response)
+            }).catch(function (error) {
+                console.log(error);
+            });
     }
     return (
         <div>
@@ -177,35 +171,35 @@ const Register = () => {
                         <div className={classes.label}>
                             Email Address
                         </div>
-                        <input placeholder='e.g. name@example.com' className={classes.input} type="email" name="email" onChange={handleChange}/>
+                        <input placeholder='e.g. name@example.com' className={classes.input} type="email" name="email" onChange={handleChange} />
 
-                        <ContinueEmailButton variant="contained" onClick={()=>emailCheck()} >Continue </ContinueEmailButton>
+                        <ContinueEmailButton variant="contained" onClick={() => emailCheck()} >Continue </ContinueEmailButton>
                     </>
                     :
                     <>
-                    {!toggleRegister ?
-                    <div>
-                        <div className={classes.label}>
-                            Name
-                        </div>
-                        <input placeholder='John Walker' className={classes.input} type="text" name="username" onChange={handleChange}/>
-                        
+                        {!toggleRegister ?
+                            <div>
+                                <div className={classes.label}>
+                                    Name
+                                </div>
+                                <input placeholder='John Walker' className={classes.input} type="text" name="username" onChange={handleChange} />
 
-                        <div className={classes.label}>
-                            Password
-                        </div>
-                        <input className={classes.input} type="password" name="password" onChange={handleChange}/>
-                        <ContinueEmailButton variant="contained" onClick={()=>userRegister()}>Register </ContinueEmailButton>
-                        </div>
-                        :
-                        <div>
-                        <div className={classes.label}>
-                        Password
-                        </div>
-                        <input className={classes.input} type="password" name="password" onChange={handleChange}/>
-                        <ContinueEmailButton variant="contained" onClick={()=>userLogin()}>Login </ContinueEmailButton>
-                        </div>
-                    }
+
+                                <div className={classes.label}>
+                                    Password
+                                </div>
+                                <input className={classes.input} type="password" name="password" onChange={handleChange} />
+                                <ContinueEmailButton variant="contained" onClick={() => userRegister()}>Register </ContinueEmailButton>
+                            </div>
+                            :
+                            <div>
+                                <div className={classes.label}>
+                                    Password
+                                </div>
+                                <input className={classes.input} type="password" name="password" onChange={handleChange} />
+                                <ContinueEmailButton variant="contained" onClick={() => userLogin()}>Login </ContinueEmailButton>
+                            </div>
+                        }
                     </>
                 }
                 <ForgetPasswordButton variant="contained" >Forget Password?</ForgetPasswordButton>

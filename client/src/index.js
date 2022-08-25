@@ -7,11 +7,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from "react-router-dom";
 import menusReducer from './features/Menus'
+import userReducer from './features/Users'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const store = configureStore({
   reducer: {
     menus: menusReducer,
+    user: userReducer,
   }
 })
 

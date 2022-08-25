@@ -121,16 +121,16 @@ const useStyles = makeStyles({
         lineHeight: "28px",
     },
     menuList: {
-        display:'flex',
+        display: 'flex',
         justifyContent: 'flex-start',
-        flexWrap:'wrap'
-        
+        flexWrap: 'wrap'
+
     },
-    menuContainer:{
-        marginLeft:'30px',
+    menuContainer: {
+        marginLeft: '30px',
     },
-    menuTitleContainer:{
-        margin:'30px 0px 0px 0px',
+    menuTitleContainer: {
+        margin: '30px 0px 0px 0px',
     }
 });
 
@@ -166,6 +166,7 @@ const Home = () => {
     const classes = useStyles();
     const menuList = useSelector((state) => state.menus)
     const dispatch = useDispatch();
+
     useEffect(() => {
         for (let i = 0; i < MenuData.length; i++) {
             dispatch(addMenu(MenuData[i]))
@@ -178,16 +179,16 @@ const Home = () => {
     }, [menuList]);
     return (
         <div>
-           
+
             <div className={classes.container}>
-                <div>
-                    <img src={DisplayImage} alt="Logo" className={classes.displayImage} />
+                <div >
+                    <img  src={DisplayImage} alt="Logo" className={classes.displayImage} />
                 </div>
 
                 <div >
                     <ThemeProvider theme={theme}>
                         <Typography className={classes.title} variant="title">
-                            Tossed - St Martin's Lane
+                            Tossed - St Martin`&apos;`s Lane
                         </Typography>
                         <Typography variant="subtitle1">
                             Chicken · Salads · Healthy
@@ -227,26 +228,22 @@ const Home = () => {
                     </ThemeProvider>
                 </div>
 
-
-
-
                 <div className={classes.actionBox}>
                     <div className={classes.actionBoxDelivery}>
                         <div style={{ display: "flex", alignItems: "center" }}> <span><TbTruckDelivery style={{ color: "#00b8a9", fontSize: "18px", marginRight: 5 }} /></span>Delivery</div>
                         <div style={{ color: "#00b8a9" }}>change</div>
                     </div>
                     <Button style={{ color: "#585c5c", textTransform: "none", padding: "7px 14px 7px 14px", background: "none", fontSize: "15px", fontWeight: "400", fontFamily: "plex-sans,sans-serif", border: "1px solid #a3afaf", }} startIcon={<BsPeople style={{ color: "#00b8a9", fontSize: "18px" }} />}>Start group order</Button>
-                 
-                    <div style={{ background: 'white', padding: '16px',}}>
-                        <QRCode value={window.location.href}  size="150" />
+
+                    <div style={{ background: 'white', padding: '16px', }}>
+                        <QRCode value={window.location.href} size={150} />
                     </div>
                 </div>
-                
 
             </div>
-            <Menubar/>
+            <Menubar />
             <div className={classes.menuContainer}>
-                {menuList.value.length > 0 && menuList.value.map((menu,i) =>
+                {menuList.value.length > 0 && menuList.value.map((menu, i) =>
 
                     <div key={i}>
                         <div className={classes.menuTitleContainer}>

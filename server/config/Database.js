@@ -1,7 +1,7 @@
 module.exports = {
     HOST: 'localhost',
     USER: 'root',
-    PASSWORD: 'back space1',
+    PASSWORD: 'root',
     DB: 'delivero',
     dialect: 'mysql',
 

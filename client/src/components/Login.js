@@ -10,6 +10,8 @@ import { gapi } from 'gapi-script'
 import api from '../api';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import { addUser } from './../features/Users'
 
 const useStyles = makeStyles({
     loginContainer: {
@@ -44,7 +46,7 @@ const useStyles = makeStyles({
     }
 });
 
-const FacebookButton = styled(Button)(({ theme }) => ({
+const FacebookButton = styled(Button)(() => ({
     transitionProperty: "box-shadow",
     transitionDuration: "150ms",
     transitionTimingFunction: "ease-in-out",
@@ -72,7 +74,7 @@ const FacebookButton = styled(Button)(({ theme }) => ({
 
 }));
 
-const GoogleButton = styled(Button)(({ theme }) => ({
+const GoogleButton = styled(Button)(() => ({
     transitionProperty: "box-shadow",
     transitionDuration: "150ms",
     transitionTimingFunction: "ease-in-out",
@@ -108,7 +110,7 @@ const GoogleButton = styled(Button)(({ theme }) => ({
 }));
 
 
-const ContinueEmailButton = styled(Button)(({ theme }) => ({
+const ContinueEmailButton = styled(Button)(() => ({
     transitionProperty: "box-shadow",
     transitionDuration: "150ms",
     transitionTimingFunction: "ease-in-out",
@@ -142,6 +144,7 @@ const Login = () => {
     const classes = useStyles();
     const clientId = "380810221970-6p2h323ibdoknuaddgrb432skkdm157o.apps.googleusercontent.com"
     const navigate = useNavigate()
+    const dispatch = useDispatch();
 
     useEffect(() => {
         function start() {
@@ -149,7 +152,7 @@ const Login = () => {
                 clientId: clientId,
                 scope: ""
             })
-        };
+        }
         gapi.load('client:auth2', start)
     }, []);
 
@@ -159,43 +162,39 @@ const Login = () => {
     }
 
 
-
-
-
     const onSuccess = (res) => {
-        console.log("LOGIN SUCCESS!",res.profileObj)
-        if(res.profileObj){
-            const userDetails ={
+        console.log("LOGIN SUCCESS!", res.profileObj)
+        if (res.profileObj) {
+            const userDetails = {
                 username: res.profileObj.name,
                 email: res.profileObj.email,
                 password: res.profileObj.googleId
             }
             api.post('/user/getuser', userDetails)
-            .then(function (response) {
-                console.log(response)
-                if(response.data.length === 0){
-                    api.post('/user/addUser', userDetails)
-                    .then(function (response) {
-                        console.log(response)
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(function (response) {
+                    console.log(response)
+                    if (response.data.length === 0) {
+                        api.post('/user/addUser', userDetails)
+                            .then(function (response) {
+                                console.log(response)
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                    } else {
+                        dispatch(addUser(response.data))
+                        navigate('/')
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         }
-        
     }
-
 
     const onFailure = (res) => {
         console.log("LOGIN FAILED!", res)
     }
-
- 
 
     return (
         <div>
@@ -208,7 +207,7 @@ const Login = () => {
                     render={renderProps => (
                         <FacebookButton onClick={renderProps.onClick} variant="contained" startIcon={<FacebookRoundedIcon />}>Continue With Facebook</FacebookButton>
                     )}
-                    />
+                />
 
                 <GoogleLogin
                     clientId={clientId}
@@ -219,7 +218,7 @@ const Login = () => {
                     onSuccess={onSuccess}
                     onFailure={onFailure}
                     cookiePolicy={'single_host_origin'}
-                    // isSignedIn={true}
+                // isSignedIn={true}
                 />
 
                 <div className={classes.loginContainerLine}><div className={classes.loginHR}></div> <span>or</span> <div className={classes.loginHR}></div></div>
