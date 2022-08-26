@@ -17,6 +17,9 @@ import { addMenu } from './../features/Menus'
 import MenuItem from './MenuItem';
 import Menubar from './Menubar';
 import QRCode from "react-qr-code";
+import { Element } from 'react-scroll';
+import StickyBox from 'react-sticky-box';
+
 
 const useStyles = makeStyles({
     displayImage: {
@@ -128,9 +131,11 @@ const useStyles = makeStyles({
     },
     menuContainer: {
         marginLeft: '30px',
+        
     },
     menuTitleContainer: {
         margin: '30px 0px 0px 0px',
+        zIndex:-1,
     }
 });
 
@@ -241,24 +246,33 @@ const Home = () => {
                 </div>
 
             </div>
-            <Menubar />
+            <StickyBox>
+                <Menubar />
+            </StickyBox>
             <div className={classes.menuContainer}>
                 {menuList.value.length > 0 && menuList.value.map((menu, i) =>
-
+                    <Element
+                    name={menu.id.toString()}
+                    className={menu.id}
+                    key={"display" + menu.id}
+                    >
+                          <br/>
                     <div key={i}>
                         <div className={classes.menuTitleContainer}>
-                            <Typography className={classes.menuTitle} variant="title">
+                            <div className={classes.menuTitle} >
                                 {menu.title}
-                            </Typography>
+                            </div>
                         </div>
                         <div className={classes.menuList}>
                             {menu.data.map((item, i) =>
-                                <MenuItem key={i} name={item.dishName} desc={item.description} price={item.displayPricing} image={item.imageUrl} />
-                            )}
+                            
+                            <MenuItem key={i} name={item.dishName} desc={item.description} price={item.displayPricing} image={item.imageUrl} />
+                            
+                                    )}
                         </div>
 
                     </div>
-
+                    </Element>
                 )
                 }
             </div>

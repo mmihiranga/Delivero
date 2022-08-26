@@ -80,7 +80,8 @@ const MenuItem = ({ name, desc, price, image }) => {
                 "&:hover": {
                     backgroundColor: "#f5f5f8",
                     elevation: 8,
-                }
+                },
+                zIndex:-1,
             }}>
 
             <CardContent className={classes.CardDetailsContent}>
