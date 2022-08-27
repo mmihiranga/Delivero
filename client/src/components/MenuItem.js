@@ -22,7 +22,8 @@ const useStyles = makeStyles({
         width: "60%",
         height: "80%",
         overflow: "hidden",
-    }
+    },
+    
 });
 
 const theme = createTheme({

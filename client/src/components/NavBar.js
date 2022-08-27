@@ -19,7 +19,6 @@ const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: "#F5F5F5",
-    width: '100%',
     [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(1),
         width: 'auto',
@@ -44,16 +43,47 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
-        width: '100%',
         color: '#9ea0a0',
-        [theme.breakpoints.up('sm')]: {
-            width: '48ch',
+        [theme.breakpoints.up('lg')]: {
+            width: '38ch',
             '&:focus': {
-                width: '54ch',
+                width: '44ch',
             },
+        },
+        [theme.breakpoints.up('md')]: {
+            width: '30ch',
+            '&:focus': {
+                width: '38ch',
+            },
+        },
+        [theme.breakpoints.down('md')]: {
+            width: '28ch',
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: '0ch',
         },
     },
 }));
+
+// const SearchBar = styled(Search)(({ theme }) => ({
+//     width: '50px',
+//     [theme.breakpoints.up('lg')]: {
+//         width: 'auto',
+//     },
+// }));
+
+
+const SignLoginBtn = styled('div')(({ theme }) => ({
+    border: '1px solid rgba(158, 160, 160, 1)',
+    paddingLeft: '8px',
+    paddingRight: '8px',
+    borderRadius: "2px",
+    [theme.breakpoints.down('md')]: {
+        display: 'none',
+    },
+}));
+
+
 
 const useStyles = makeStyles({
     avatar: {
@@ -110,13 +140,14 @@ const NavBar = () => {
 
                             :
 
-                            <div style={{ border: '1px solid rgba(158, 160, 160, 1)', paddingLeft: '8px', paddingRight: '8px', borderRadius: "2px" }} >
+                            <SignLoginBtn>
                                 <Button
                                     size="large"
                                     edge="start"
                                     aria-label="open drawer"
                                     sx={{
                                         color: "#00CCBC",
+                                        
                                     }}
                                     onClick={() => { return navigate('/login') }}
                                 >
@@ -124,7 +155,7 @@ const NavBar = () => {
                                     <Typography style={{ color: 'black' }} variant="subtitle1">Sign up or log in</Typography>
 
                                 </Button>
-                            </div>}
+                            </SignLoginBtn>}
                         <div style={{ border: '1px solid rgba(158, 160, 160, 1)', marginLeft: '8px', paddingLeft: '8px', paddingRight: '8px', borderRadius: "2px" }} >
                             <Button
                                 size="large"

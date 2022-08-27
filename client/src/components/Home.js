@@ -36,14 +36,6 @@ const useStyles = makeStyles({
         justifyContent: 'space-evenly',
         flexWrap: 'wrap',
 
-
-        // display: 'grid',
-        // gridGap: '24px',
-        // gridTemplateAreas: 'image info',
-        // gridTemplateColumns: '30% 1fr',
-        // gridTemplateRows: 'auto',
-
-
     },
     title: {
         fontWeight: '600',
