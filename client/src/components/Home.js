@@ -19,6 +19,9 @@ import Menubar from './Menubar';
 import QRCode from "react-qr-code";
 import { Element } from 'react-scroll';
 import StickyBox from 'react-sticky-box';
+import Cart from './Cart';
+import { Grid } from '@mui/material';
+import Box from '@mui/material/Box';
 
 
 const useStyles = makeStyles({
@@ -37,12 +40,21 @@ const useStyles = makeStyles({
         flexWrap: 'wrap',
 
     },
+    detailsBox:{
+        '@media (max-width: 575px)': {
+            padding:'10px',
+        }
+    },
     title: {
         fontWeight: '600',
         color: '#2e3333',
         fontFamily: " stratos,sans-serif",
         fontSize: "40px",
         lineHeight: "48px",
+        '@media (max-width: 575px)': {
+            fontSize: "28px",
+            lineHeight: "35px",
+         }
     },
     flexBox: {
         display: 'flex',
@@ -78,6 +90,9 @@ const useStyles = makeStyles({
     actionBox: {
         maxWidth: "200px",
         justifyContent: "flex-end",
+        '@media (max-width: 1275px)': {
+           display:'none',
+        }
     },
     actionBoxDelivery: {
         display: "flex",
@@ -115,15 +130,20 @@ const useStyles = makeStyles({
         fontSize: "22px",
         lineHeight: "28px",
     },
-    menuList: {
-        display: 'flex',
-        justifyContent: 'flex-start',
-        flexWrap: 'wrap'
+    menuContainerBody: {
+       
 
     },
     menuContainer: {
-        marginLeft: '30px',
-        
+        marginInline: '30px',
+        width: 'fit-content',
+        display: 'block',
+        paddingInline: '30px',
+        '@media (max-width: 575px)': {
+            padding:'0px',
+            marginInline:"0px",
+         }
+        // flexWrap: 'wrap'
     },
     menuTitleContainer: {
         margin: '30px 0px 0px 0px',
@@ -182,7 +202,7 @@ const Home = () => {
                     <img  src={DisplayImage} alt="Logo" className={classes.displayImage} />
                 </div>
 
-                <div >
+                <div className={classes.detailsBox}>
                     <ThemeProvider theme={theme}>
                         <Typography className={classes.title} variant="title">
                             Tossed - St Martin`&apos;`s Lane
@@ -241,32 +261,55 @@ const Home = () => {
             <StickyBox>
                 <Menubar />
             </StickyBox>
+            
             <div className={classes.menuContainer}>
+            <Box sx={
+                { 
+                display: 'grid',
+                gridGap: '32px 24px',
+                gridTemplateColumns: '60% 1fr',
+                gridTemplateRows: 'auto 1fr',
+                '@media only screen and (min-width: 960px)': {
+                    gridTemplateColumns: 'minmax(50%,60%) minmax(420px,1fr)',
+                },
+                '@media (max-width: 860px)': {
+                    gridTemplateColumns: '1fr',
+                }
+              }
+            }>
+               <item>
                 {menuList.value.length > 0 && menuList.value.map((menu, i) =>
                     <Element
                     name={menu.id.toString()}
                     className={menu.id}
                     key={"display" + menu.id}
                     >
-                          <br/>
+                    <br/>
                     <div key={i}>
                         <div className={classes.menuTitleContainer}>
                             <div className={classes.menuTitle} >
                                 {menu.title}
                             </div>
                         </div>
-                        <div className={classes.menuList}>
+                        <Grid container spacing={2}>
                             {menu.data.map((item, i) =>
-                            
-                            <MenuItem key={i} name={item.dishName} desc={item.description} price={item.displayPricing} image={item.imageUrl} />
-                            
+                            <Grid item key={i} sx={12} lg={6} xs={12} md={12} xl={6} >
+                            <MenuItem name={item.dishName} desc={item.description} price={item.displayPricing} image={item.imageUrl} />
+                            </Grid>
                                     )}
-                        </div>
+                        </Grid>
 
                     </div>
                     </Element>
                 )
                 }
+                </item>
+                <item className={classes.cartBox}>
+                <StickyBox style={{paddingInline:"50px",paddingTop:100}}>
+                <Cart/>
+                </StickyBox>
+                </item>
+            </Box>
             </div>
 
         </div>

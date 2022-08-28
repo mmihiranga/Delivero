@@ -11,7 +11,7 @@ const useStyles = makeStyles({
         height: '100px',
         width: '100px',
         transition: "opacity .5s ease-out",
-        objectFit: "cover"
+        objectFit: "cover",
 
     },
     CardDetailsContent: {
@@ -72,9 +72,8 @@ const MenuItem = ({ name, desc, price, image }) => {
                 justifyContent: 'space-evenly',
                 alignItems: 'center',
                 backgroundColor: "#f5f5f8",
-                margin: '10px',
                 height: '140px',
-                width: '40%',
+                width: '100%',
                 elevation: 4,
                 borderRadius: '5px',
                 overflow: 'hidden',
