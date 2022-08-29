@@ -87,7 +87,10 @@ const SignLoginBtn = styled('div')(({ theme }) => ({
 
 const useStyles = makeStyles({
     avatar: {
-        display: 'flex'
+        display: 'flex',
+        '@media (max-width: 960px)': {
+            display: 'none',
+        }
     },
 
     userName: {
@@ -147,7 +150,7 @@ const NavBar = () => {
                                     aria-label="open drawer"
                                     sx={{
                                         color: "#00CCBC",
-                                        
+
                                     }}
                                     onClick={() => { return navigate('/login') }}
                                 >

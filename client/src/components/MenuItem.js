@@ -23,7 +23,7 @@ const useStyles = makeStyles({
         height: "80%",
         overflow: "hidden",
     },
-    
+
 });
 
 const theme = createTheme({
@@ -81,7 +81,7 @@ const MenuItem = ({ name, desc, price, image }) => {
                     backgroundColor: "#f5f5f8",
                     elevation: 8,
                 },
-                zIndex:-1,
+                zIndex: -1,
             }}>
 
             <CardContent className={classes.CardDetailsContent}>
